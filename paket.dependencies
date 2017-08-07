@@ -12,6 +12,7 @@ nuget FSharp.Core
 nuget WebSharper
 nuget WebSharper.Html
 nuget WebSharper.UI.Next
+nuget YC.SDK.Runtime 0.1.1
 
 group Build
   source https://nuget.org/api/v2
