@@ -1,0 +1,25 @@
+type project
+title
+    YC.Web
+owners
+    ShalamovRoman
+authors 
+    ShalamovRoman
+projectUrl
+    https://github.com/ShalamovRoman/YC.Web
+iconUrl
+    https://raw.githubusercontent.com/ShalamovRoman/YC.Web/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/ShalamovRoman/YC.Web/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+copyright
+    Copyright 2015
+tags
+    fsharp
+summary
+    Web UI for YC
+description
+    Description not set
+
+
