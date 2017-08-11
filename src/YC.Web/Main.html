@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${title}</title>
+    <title>YC.Web</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
     <style>
         /* Sticky footer styles */
@@ -14,7 +14,8 @@
 
         body {
             /* Margin bottom by footer height */
-            margin-bottom: 60px;
+            margin-bottom: 50px;
+            background-color: #ffffff;
         }
 
         .footer {
@@ -22,8 +23,9 @@
             bottom: 0;
             width: 100%;
             /* Set the fixed height of the footer here */
-            height: 60px;
-            background-color: #f5f5f5;
+            height: 40px;
+            line-height: 40px;
+            background-color: #ffffff;
         }
 
         .container .text-muted {
@@ -32,8 +34,8 @@
     </style>
 </head>
 <body>
-    <!-- Static navbar -->
-    <nav class="navbar navbar-default navbar-static-top">
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -41,7 +43,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Your App</a>
+                <a class="navbar-brand" href="#">
+                    YC.Web
+                </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav" data-hole="menubar"></ul>
@@ -51,15 +55,14 @@
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-    <div class="container">
-        <div data-replace="body">
-        </div>
+
+    <div data-replace="body">
     </div>
+
     <footer class="footer">
         <div class="container">
-            <p class="text-muted">
-                For an enhanced template that provides automatic GitHub deployment to Azure, fork from <a href="https://github.com/intellifactory/ClientServer.Azure">GitHub</a>, or
-                read more <a href="http://websharper.com/blog-entry/4368/deploying-websharper-apps-to-azure-via-github">here</a>.
+            <p align="right">
+                For more information go to project <a href="https://github.com/ShalamovRoman/YC.Web">GitHub</a> page.
             </p>
         </div>
     </footer>
