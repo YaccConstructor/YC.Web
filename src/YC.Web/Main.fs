@@ -111,5 +111,5 @@ module Site =
             | EndPoint.Home -> HomePage ctx
             | EndPoint.BioGraph -> BioGraphPage ctx
             | EndPoint.GraphParsingDemo -> GraphParsingDemoPage ctx
-            | EndPoint.RecursiveAutomata -> GraphParsingDemoPage ctx
+            | EndPoint.RecursiveAutomata -> RecursiveAutomataPage ctx
         )
