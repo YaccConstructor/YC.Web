@@ -33,8 +33,7 @@ module Templating =
              ]
         [
             LI ["Home" => EndPoint.Home]
-//            LI ["About" => EndPoint.BioGraph]
-//            LI ["Test" => EndPoint.GraphParsingDemo]
+            LI [A [Attr.HRef "https://github.com/YaccConstructor/YC.Web"] -< [Text "Documentation"] ]
         ]
 
     let Main ctx endpoint title body : Async<Content<EndPoint>> =
@@ -54,27 +53,30 @@ module Site =
                 Div [
                     H1 [Text "Welcome to YC.Web!"] -< [Attr.Align "center"]
                     P [Text ""] -< [Attr.Align "center"]
-                    P [Text "Blablablalbalblbalablbabalballabbalablballablababllbaballbabllablablablablbaabl"] -< [Attr.Align "center"]
-                    P [Text "Blablablalbalblbalablbabalballabbalablballablababllbabal"] -< [Attr.Align "center"]
-                    P [Text "Blablablalbalblbalablbabalballabbalablball"] -< [Attr.Align "center"]
+                    P [Text "YC.Web is a web application for YaccConstructor."] -< [Attr.Align "center"]
+                    P [Text "YaccConstructor is a platform for parser generators and other grammarware research and development."] -< [Attr.Align "center"]
+                    P [Text "Click "] -<
+                        [
+                        A [Text "here"] -< [Attr.HRef "http://yaccconstructor.github.io/YaccConstructor/index.html"]  -< [Target "_blank"]
+                        ] -< [Text " to learn more about YaccConstructor."] -< [Attr.Align "center"]
                     ] -< [Attr.Class "container"]
                 ] -< [Attr.Class "jumbotron"]
             Div [ 
                 Div [
                     Div [
                         H2 [Text "Biograph"]
-                        P [Text "Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui."]
-                        P [ A [Text "View details"] -< [Attr.HRef (ctx.Link EndPoint.BioGraph)] -< [Attr.Class "btn btn-default"] ]
+                        P [Text "Web application for searching subpaths in the metagenomic sequences. This app also visualizes the obtained sequences on input graph."]
+                        P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.BioGraph)] -< [Attr.Class "btn btn-default"] ]
                         ] -< [Attr.Class "col-md-4"]
                     Div [
                         H2 [Text "GraphParsingDemo"] 
-                        P [Text "Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui."]
-                        P [ A [Text "View details"] -< [Attr.HRef (ctx.Link EndPoint.GraphParsingDemo)] -< [Attr.Class "btn btn-default"]]
+                        P [Text "Web application for graph parsing and visualization. This app also can extract the minimal length path between two specified verteces."]
+                        P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.GraphParsingDemo)] -< [Attr.Class "btn btn-default"]]
                         ] -< [Attr.Class "col-md-4"]
                     Div [
-                        H2 [Text "Recursive automata algorithm"] 
-                        P [Text "Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui."]
-                        P [ A [Text "View details"] -< [Attr.HRef (ctx.Link EndPoint.RecursiveAutomata)] -< [Attr.Class "btn btn-default"]]
+                        H2 [Text "Recursive automata"] 
+                        P [Text "Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus."]
+                        P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.RecursiveAutomata)] -< [Attr.Class "btn btn-default"]]
                         ] -< [Attr.Class "col-md-4"]
                     ] -< [Attr.Class "row"]
                 ] -< [Attr.Class "container"]
@@ -83,22 +85,23 @@ module Site =
 
     let BioGraphPage ctx =
         Templating.Main ctx EndPoint.BioGraph "BioGraph" [
-            H1 [Text "BioGraph"]
-            P [Text "This is a template WebSharper client-server application."]
-            Label [Text "WTF"]
-            WebSharper.Html.Server.Tags.TextArea [Text ""] -< [Cols "20"] -< [Rows "14"] -< [Disabled ""]
+            Div [
+                H1 [Text "BioGraph page"] -< [Attr.Align "center"]
+                ] -< [Attr.Class "jumbotron"]
         ]
 
     let GraphParsingDemoPage ctx =
        Templating.Main ctx EndPoint.GraphParsingDemo "GraphParsingDemo" [
-           H1 [Text "GraphParsingDemoPage"]
-           P [Text "This is test string"]
-           Div [ClientSide <@ Client.HelloWorld() @>]
+            Div [
+                H1 [Text "GraphParsing page"] -< [Attr.Align "center"]
+                ] -< [Attr.Class "jumbotron"]
        ]
 
     let RecursiveAutomataPage ctx =
        Templating.Main ctx EndPoint.RecursiveAutomata "RecursiveAutomata" [
-           H1 [Text "RecursiveAutomataPage"]
+            Div [
+                H1 [Text "Recursive Automata page"] -< [Attr.Align "center"]
+                ] -< [Attr.Class "jumbotron"]
        ]
  
     [<Website>]
