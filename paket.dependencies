@@ -8,8 +8,10 @@ source https://nuget.org/api/v2
 # To increase the minimum assumed F# version to F# 4.1, change to 
 #     nuget FSharp.Core ~> 4.1.0 redirects: force
 
-nuget FSharp.Core
+nuget FSharp.Core 4.0.0.1
+nuget Mono.Addins 1.3.2
 nuget WebSharper
+nuget WebSharper.Formlets
 nuget WebSharper.Html
 nuget WebSharper.UI.Next
 nuget YC.SDK.Runtime 0.1.1
