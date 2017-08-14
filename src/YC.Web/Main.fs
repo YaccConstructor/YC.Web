@@ -8,6 +8,7 @@ type EndPoint =
     | [<EndPoint "/BioGraph">] BioGraph
     | [<EndPoint "/GraphParsingDemo">] GraphParsingDemo
     | [<EndPoint "/RecursiveAutomata">] RecursiveAutomata
+    | [<EndPoint "/graph"; Wildcard>] Graph of countOfVertex:int * edges: array<int * int * string * int>
 
 module Templating =
     open WebSharper.Html.Server
@@ -19,10 +20,21 @@ module Templating =
             Body : list<Element>
         }
 
+    type GraphPage =
+        {
+            Title : string
+            Body : list<Element>
+        }
+
     let MainTemplate =
         Content.Template<Page>("~/Main.html")
             .With("title", fun x -> x.Title)
             .With("menubar", fun x -> x.MenuBar)
+            .With("body", fun x -> x.Body)
+ 
+    let GraphTemplate =
+        Content.Template<GraphPage>("~/Graph.html")
+            .With("title", fun x -> x.Title)
             .With("body", fun x -> x.Body)
 
     // Compute a menubar where the menu item for the given endpoint is active
@@ -41,6 +53,13 @@ module Templating =
             {
                 Title = title
                 MenuBar = MenuBar ctx 
+                Body = body
+            }
+
+    let Graph title body =
+        Content.WithTemplate GraphTemplate
+            {
+                Title = title
                 Body = body
             }
 
@@ -64,7 +83,7 @@ module Site =
             Div [ 
                 Div [
                     Div [
-                        H2 [Text "Biograph"]
+                        H2 [Text "BioGraph"]
                         P [Text "Web application for searching subpaths in the metagenomic sequences. This app also visualizes the obtained sequences on input graph."]
                         P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.BioGraph)] -< [Attr.Class "btn btn-default"] ]
                         ] -< [Attr.Class "col-md-4"]
@@ -79,8 +98,7 @@ module Site =
                         P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.RecursiveAutomata)] -< [Attr.Class "btn btn-default"]]
                         ] -< [Attr.Class "col-md-4"]
                     ] -< [Attr.Class "row"]
-                ] -< [Attr.Class "container"]
-            
+                ] -< [Attr.Class "container"]            
         ]
 
     let BioGraphPage ctx =
@@ -88,22 +106,34 @@ module Site =
             Div [
                 H1 [Text "BioGraph page"] -< [Attr.Align "center"]
                 ] -< [Attr.Class "jumbotron"]
+            Div [
+                ClientSide <@ Client.Main () @>
+             ]   
         ]
 
     let GraphParsingDemoPage ctx =
        Templating.Main ctx EndPoint.GraphParsingDemo "GraphParsingDemo" [
             Div [
-                H1 [Text "GraphParsing page"] -< [Attr.Align "center"]
-                ] -< [Attr.Class "jumbotron"]
+                 H1 [Text "GraphParsing Application"] -< [Attr.Align "center"]
+                 ] -< [Attr.Class "jumbotron"]
+            Div [
+                ClientSide <@ Formlet.FormRun () @>
+             ]   -< [Attr.Align "center"]
+              
        ]
 
     let RecursiveAutomataPage ctx =
        Templating.Main ctx EndPoint.RecursiveAutomata "RecursiveAutomata" [
             Div [
-                H1 [Text "Recursive Automata page"] -< [Attr.Align "center"]
+                H1 [Text "RecursiveAutomata page"] -< [Attr.Align "center"]
                 ] -< [Attr.Class "jumbotron"]
-       ]
- 
+        ]
+
+    let GraphPage g i =
+        Templating.Graph "Graph" [
+            Div [Attr.Id "canvas"; Attr.Height "height"; Attr.Width "width"]
+        ]
+
     [<Website>]
     let Main =
         Application.MultiPage (fun ctx endpoint ->
@@ -111,5 +141,6 @@ module Site =
             | EndPoint.Home -> HomePage ctx
             | EndPoint.BioGraph -> BioGraphPage ctx
             | EndPoint.GraphParsingDemo -> GraphParsingDemoPage ctx
-            | EndPoint.RecursiveAutomata -> GraphParsingDemoPage ctx
+            | EndPoint.RecursiveAutomata -> RecursiveAutomataPage ctx
+            | EndPoint.Graph (i, g) -> GraphPage g i
         )
