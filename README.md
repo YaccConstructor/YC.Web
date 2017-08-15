@@ -1,6 +1,6 @@
 ![Repository Size](https://reposs.herokuapp.com/?path=ShalamovRoman/YC.Web)
 # YC.Web 
-Web UI for YC
+Web interface for YaccConstructor project
 
 ## Build Status
 
