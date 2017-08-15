@@ -141,7 +141,7 @@ d: U"
                         SucTreeGraph(tree, graph)
                     |  GraphParsingFunctions.ResNode.None -> 
                         Error "No such nodes found"
-                    |  GraphParsingFunctions.ResNode.Error msg -> 
+                    |  GraphParsingFunctions.ResNode.Error msg -> git
                         Error msg
         with
         |e -> Error e.Message
