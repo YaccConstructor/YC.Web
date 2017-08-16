@@ -57,7 +57,7 @@ module Client =
             let! dataSelect = 
                 wsfc.Select 1 (("", "") :: defaultData)
                 |> wsfe.WithTextLabel "ChooseDefault"
-                |> setFormSize (getFormSize 20 150) "select" 
+                |> setFormSize (getFormSize 27 150) "select" 
                 |> wsfe.WithFormContainer 
             return dataSelect
                 }
@@ -124,24 +124,6 @@ module Client =
          }
         |> wsfe.WithFormContainer 
 
-//    let OutputControl outputText  =
-//        wsff.Do {
-//            let! wrapCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "wrap" |> wsfe.WithLabelLeft 
-//            let wrapValue =
-//                match wrapCheckbox with
-//                | false -> "off"
-//                | true -> "soft"             
-//            let! output =
-//                wsff.OfElement (fun () -> TextArea [Attr.ReadOnly "readonly"; Attr.Wrap wrapValue; Text outputText] )
-//                |> wsfe.WithTextLabel "Output"
-//                |> wsfe.WithLabelAbove
-//                |> setFormSize (getFormSize 85 500) "textarea"               
-//            return output
-//                }
-//                   
-//        |> wsfe.WithFormContainer
-//        |> wsff.FlipBody
-
 //************GraphVisualization components************//
     
     //Visualize graph using JavaScript library
@@ -158,16 +140,6 @@ module Client =
             canvas
             button
             ]
-
-//        let Graph (height, width, g: array<int * int * string * bool>, c: int) =
-//            let button = Button [Text "Draw!"; Attr.Style "width: 350px; height: 350px"]
-//            button.OnClick (fun _ _ -> 
-//                JS.Window?draw g c
-//                button.Remove()) 
-//            Div [
-//                Div [Attr.Id "canvas"]
-//                button
-//                ]
 
     //Create graph visualizing area
     let ShowGraphImageControl lbl (graph: GraphParsingFunctions.InputGraph) id = 
@@ -200,25 +172,6 @@ module Client =
         |> wsfe.WithTextLabel signature
         |> wsfe.WithLabelAbove
         |> wsfe.WithFormContainer
-
-//        let RangeControl =
-//            wsff.Yield (fun min max -> (int min, int max))
-//            <*> wsff.Do {
-//                    let! min = 
-//                        wsfc.Input ""
-//                        |> wsfe.WithTextLabel "from" 
-//                        |> setFormSize (getFormSize 30 210) "input"
-//                    return min }
-//            <*> wsff.Do {                
-//                    let! max = 
-//                        wsfc.Input ""
-//                        |> wsfe.WithTextLabel "to" 
-//                        |> setFormSize (getFormSize 30 210) "input"      
-//                    return max }
-//            |> wsff.Horizontal 
-//            |> wsfe.WithTextLabel "String range"
-//            |> wsfe.WithLabelAbove 
-//            |> wsfe.WithFormContainer 
 
 //************GraphParsing Page client-side block************//
     [<JavaScript>]
@@ -339,11 +292,11 @@ module Client =
                 |> wsff.Vertical 
 
         let MainFormRun () =
-            let InpForm = MainForm.Run(fun _ -> ())    
+            let Form = MainForm.Run(fun _ -> ())    
                  
             Div [
                 Div [
-                    InpForm
+                    Form
                     ] -< [Attr.Align "center"]
             ] 
  
@@ -351,7 +304,17 @@ module Client =
 
     [<JavaScript>]
     module BioGraphApp =
-     
+    
+        let Graph (height, width, g: array<int * int * string * bool>, c: int) =
+            let button = Button [Text "Draw!"; Attr.Style "width: 350px; height: 350px"]
+            button.OnClick (fun _ _ -> 
+                JS.Window?draw g c
+                button.Remove()) 
+            Div [
+                Div [Attr.Id "canvas"]
+                button
+                ]
+   
 //        let ShowImageControl grOption drawGr = 
 //            let src =
 //                match (grOption, drawGr) with
@@ -383,55 +346,37 @@ module Client =
 //                |> wsfe.WithTextLabel "Graph visualisation"
 //                |> wsfe.WithLabelAbove 
 //                |> wsfe.WithFormContainer
-//   
-//        let frm =   
-//        let Input2Form  =
-//            let InputGrammarForm =
-//                (wsff.Yield (fun (grm: string) (graph: string) (rng: int * int) (drawGr: bool) -> (grm, graph, rng, drawGr))
-//                <*> (InputAreaControl "Grammar" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Grammar |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Grammar grmName)))
-//                <*> RangeControl "String Range" "Min" "Max" 
-//                |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
-//                                                                                        Label = Some "GO" 
-//                                                                                        Style = Some buttonStyle })
-//            let InputGraphForm = 
-//                (wsff.Yield (fun (grm: string) (graph: string) (rng: int * int) (drawGr: bool) -> (grm, graph, rng, drawGr))
-//                <*> (InputAreaControl "Graph" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Graph |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Graph grmName)))
-//                <*> (wsfc.Checkbox false |> wsfe.WithTextLabel "Draw Graph" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer))
-//
-//            (wsff.Yield (fun (grm: string) (graph: string) (rng: int * int) (drawGr: bool) -> (grm, graph, rng, drawGr))
-//            <*> InputGrammarForm
-//            <*> InputGraphForm
-//
-//            |> wsff.Horizontal
+   
+//        let MainForm =   
 
-//        let InputForm = 
-        let InputGrammarForm = 
-            wsff.Do {
-                let! grammar= InputAreaControl "Grammar" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Grammar |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Grammar grmName))
-                let! strRange = RangeControl "String Range" "Min" "Max" 
-                return (grammar,strRange)
-                }
-                |> wsfe.WithFormContainer
-                |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
-                                                                                    Label = Some "GO" 
-                                                                                    Style = Some buttonStyle })   
-                |> wsff.Vertical   
-        let InputGraphForm = 
-            wsff.Do {
-                let! graph = InputAreaControl "Graph" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Graph |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Graph grmName))
-                let! drawGr = wsfc.Checkbox false |> wsfe.WithTextLabel "Draw Graph" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer
-                return (graph, drawGr)
-                    } 
+        let InputForm = 
+            let InputGrammarForm = 
+                wsff.Do {
+                    let! grammar= InputAreaControl "Grammar" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Grammar |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Grammar grmName))
+                    let! strRange = RangeControl "String Range" "Min" "Max" 
+                    return (grammar,strRange)
+                    }
                     |> wsff.Vertical
-                    |> wsfe.WithFormContainer
+                    |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"tomiddle"})
+
+//                        |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
+//                                                                                            Label = Some "GO" 
+//                                                                                            Style = Some buttonStyle })      
+            let InputGraphForm = 
+                wsff.Do {
+                    let! graph = InputAreaControl "Graph" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Graph |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Graph grmName))
+                    let! drawGr = wsfc.Checkbox false |> wsfe.WithTextLabel "Draw Graph" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer
+                    return (graph, drawGr)
+                        } 
+                    |> wsff.Vertical
+                    |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"tomiddle"})
                                                                                   
-//            wsff.Do {
-//                let! x = InputGrammarForm  
-//                let! y = InputGraphForm
-//                return (x, y) }
-//              |> wsff.Horizontal                              
-// 
-//            let OutputForm (grm: string, graph: string, rng: int * int, drawGr: bool) =
+            (wsff.Yield (fun (grmInput: string*(int*int)) (grphInput: string*bool) -> (grmInput,  grphInput))
+            <*> (InputGrammarForm)
+            <*> (InputGraphForm))
+                |> wsff.Horizontal                              
+                |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"totop"}) 
+//            let OutputForm ((grm: string, rng: int * int), (graph: string, drawGr: bool)) =
 //                wsff.Do {
 //                    let (grOption, seqs) =
 //                        match BioGraphRemote.Parse grm graph rng drawGr with
@@ -442,27 +387,19 @@ module Client =
 //                                                                      | Some(graphOption) -> (Some(graphOption), System.String.Join("\n",seqs))
 //                                                                                                                                                                                                                                                                                              
 //                    let! picture = ShowImageControl grOption drawGr
-//                    let! output = OutputControl seqs              
+//                    let! output = OutputAreaControl seqs "Output"             
 //                    return (output) }
 //                |> wsff.Vertical 
 //                                                               
 //            wsff.Do {
 //                let! x = InputForm  
-//                let! y =  OutputForm x
+//                let! y = OutputForm x
 //                return (x, y) }
 //              |> wsff.Horizontal
-//                                                                     
-        let FormRun () =
-            let InpGrForm =
-                InputGrammarForm.Run(fun _ -> ())
-            let InpGraphForm =
-                InputGraphForm.Run(fun _ -> ())
+                                                                     
+        let MainFormRun () =
+            let Form = InputForm.Run(fun _ -> ())
 
             Div [
-                Div [
-                    InpGrForm
-                    ] -< [Attr.Class "col-md-6"]
-                Div [
-                    InpGraphForm
-                    ] -< [Attr.Class "col-md-6"]
+                Form 
             ] 

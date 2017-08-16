@@ -107,7 +107,7 @@ module Site =
                 H1 [Text "BioGraph page"] -< [Attr.Align "center"]
                 ] -< [Attr.Class "jumbotron"]
             Div [
-                ClientSide <@ Client.BioGraphApp.FormRun () @>
+                ClientSide <@ Client.BioGraphApp.MainFormRun () @>
              ] -< [Attr.Align "center"]
         ]
 
