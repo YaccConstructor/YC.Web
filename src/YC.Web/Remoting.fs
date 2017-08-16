@@ -13,7 +13,7 @@ open System.Collections.Generic
 open Yard.Generators.GLL
 open Yard.Generators.Common
 
-//=========GraphParsing remoting block=========//
+//************GraphParsing remoting block************//
 module GraphParsingRemote = 
 
     type Result =
@@ -141,13 +141,13 @@ d: U"
                         SucTreeGraph(tree, graph)
                     |  GraphParsingFunctions.ResNode.None -> 
                         Error "No such nodes found"
-                    |  GraphParsingFunctions.ResNode.Error msg -> git
+                    |  GraphParsingFunctions.ResNode.Error msg -> 
                         Error msg
         with
         |e -> Error e.Message
 
 
-//=========BioGraph remoting block=========//
+//************BioGraph remoting block************//
 
 module BioGraphRemote =
     type FileType =
