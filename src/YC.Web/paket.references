@@ -2,6 +2,6 @@ FSharp.Core
 WebSharper
 WebSharper.Html
 WebSharper.UI.Next
-WebSharper.Formlets
 YC.SDK.Runtime
 Mono.Addins
+WebSharper.Formlets
