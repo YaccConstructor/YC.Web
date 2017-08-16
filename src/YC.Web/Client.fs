@@ -55,10 +55,10 @@ module Client =
     let ChooseDefaultControl (defaultData: List<string * string>) = 
         wsff.Do {
             let! dataSelect = 
-                wsfc.Select 0 (("", "") :: defaultData)
+                wsfc.Select 1 (("", "") :: defaultData)
                 |> wsfe.WithTextLabel "ChooseDefault"
-                |> setFormSize (getFormSize 30 150) "select" 
-                |> wsfe.WithFormContainer     
+                |> setFormSize (getFormSize 20 150) "select" 
+                |> wsfe.WithFormContainer 
             return dataSelect
                 }
 
@@ -93,8 +93,7 @@ module Client =
                     let! fileInput = FileControl
                     return  (defaultValue, fileInput) 
                     }   
-                |> wsff.Horizontal                      
-                |> wsfe.WithFormContainer              
+                |> wsff.Horizontal                                
             let txt = 
                 match fileInput with
                 | "" -> defaultValue
@@ -109,6 +108,7 @@ module Client =
             |> wsff.FlipBody
             |> wsff.Vertical
             |> wsfe.WithFormContainer
+
 
 //************OutputArea component************// 
 
@@ -176,7 +176,7 @@ module Client =
         |> wsfe.WithLabelAbove 
         |> wsfe.WithFormContainer  
 
-//************Range component************//
+//************Range component with integer values************//
 
     let RangeControl signature initLabel finLabel =
         wsff.Yield (fun min max -> (int min, int max))
@@ -185,12 +185,16 @@ module Client =
                     wsfc.Input ""
                     |> wsfe.WithTextLabel initLabel 
                     |> setFormSize (getFormSize 20 50) "input"
+                    |>  wsfd.Validator.IsInt "Enter numeric value"
+                    |> wsfe.WithValidationIcon
                 return initField }
         <*> wsff.Do {                
                 let! finField = 
                     wsfc.Input ""
                     |> wsfe.WithTextLabel finLabel
-                    |> setFormSize (getFormSize 20 50) "input"      
+                    |> setFormSize (getFormSize 20 50) "input"   
+                    |>  wsfd.Validator.IsInt "Enter numeric value"
+                    |> wsfe.WithValidationIcon   
                 return finField }
         |> wsff.Horizontal 
         |> wsfe.WithTextLabel signature
@@ -240,106 +244,107 @@ module Client =
             |> wsfe.WithTextLabel lbl        
             |> wsfe.WithLabelAbove 
             |> wsfe.WithFormContainer           
- 
-        let GrammarInputForm =         
+        
+        let MainForm = 
+            let InputForm = 
+                let GrammarInputForm =         
+                    wsff.Do {
+                        let! grammar = InputAreaControl "Grammar" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Grammar |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Grammar grmName))
+                        return (grammar) 
+                        }
+                    |> wsff.Vertical
+                    |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"tomiddle"})
+                let GraphInputForm  = 
+                    wsff.Do {
+                        let! graph = InputAreaControl "Graph" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Graph |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Graph grmName))
+                        let! subgraphCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "Show formal subgraph" |> wsfe.WithLabelLeft
+                        let! removeCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "Remove redundant nodes" |> wsfe.WithLabelLeft 
+                        return(graph,subgraphCheckbox,removeCheckbox)
+                        }        
+                    |> wsff.Vertical
+                    |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"tomiddle"})
+                (wsff.Yield (fun (grmInput: string) (grphInput: string*bool*bool) -> (grmInput,  grphInput))
+                <*> (GrammarInputForm)
+                <*> (GraphInputForm))
+                |> wsff.Horizontal  
+                |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"totop"})
+    //            |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
+    //                                                                    Label = Some "SHOW GRAPH" 
+    //                                                                    Style = Some buttonStyle })
+
+            let OutputForm ((grammar: string), ((graph: string), (subgraphCheckbox: bool),  (removeCheckbox: bool))) =  
+                let VisualizationWithRangeForm = 
+                    let VisualizationForm  =                            
+                        wsff.Do {
+                            match GraphParsingRemote.draw grammar graph subgraphCheckbox removeCheckbox with
+                            | GraphParsingRemote.Result.Error msg ->
+                                let! graphImg = OutputAreaControl ("Error:" + msg) "Graph Visualization"
+                                let! sppfImg = OutputAreaControl ("Error:" + msg) "SPPF"
+                                return (graphImg, sppfImg)
+                            | GraphParsingRemote.Result.SucTreeGraph (tree, graph) ->
+                                let! graphImg = ShowGraphImageControl "Graph Visualization" graph "canvas1"
+                                let! sppfImg = ShowTreeImageControl  "SPPF" tree "canvas2"
+                                return (graphImg, sppfImg) 
+                                }          
+                            |> wsfe.WithFormContainer 
+                            |> wsff.Horizontal  
+
+                    let RangeAndButtonForm  =
+                        wsff.Do {
+                            let! rng = RangeControl "Vertices" "Initial" "Final"
+                            return rng 
+                            }                   
+                        |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
+                                                                                                    Label = Some "FIND PATH"
+                                                                                                    Style = Some buttonStyle })  
+                        |> wsff.Horizontal    
+               
+                    wsff.Do {
+                        let! x = VisualizationForm 
+                        let! y = RangeAndButtonForm
+                        return (x, y)
+                            }
+                    |> wsff.Vertical
+         
+                let PathsVisualizationForm rng = 
+                            wsff.Do {
+                                if fst rng < snd rng && fst rng >= 0 && snd rng >= 0
+                                then
+                                    match GraphParsingRemote.findMinLen grammar graph removeCheckbox (fst rng) (snd rng) with
+                                    | GraphParsingRemote.Result.Error msg ->
+                                        let! pathImg = OutputAreaControl ("Error:" + msg) "Path"
+                                        let! sppfPathImg = OutputAreaControl ("Error:" + msg) "SPPF Path" 
+                                        return (pathImg, sppfPathImg)
+                                    | GraphParsingRemote.Result.SucTreeGraph (tree, graph) ->
+                                        let! pathImg = ShowGraphImageControl "Path" graph "canvas3"
+                                        let! sppfPathImg = ShowTreeImageControl "SPPF Path" tree "canvas4"
+                                        return (pathImg, sppfPathImg)
+                                else
+                                    let! pathImg = OutputAreaControl "Error: Incorrect range" "Path"
+                                    let! sppfPathImg = OutputAreaControl "Error: Incorrect range" "SPPF Path"
+                                    return (pathImg, sppfPathImg) } 
+                            |> wsfe.WithFormContainer 
+                            |> wsff.Horizontal 
+           
+                wsff.Do {
+                    let! x = VisualizationWithRangeForm 
+                    let! y = PathsVisualizationForm (snd x)
+                    return (x, y) }
+                    |> wsff.Vertical  
+                  
             wsff.Do {
-                let! grammar = InputAreaControl "Grammar" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Grammar |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Grammar grmName))
-                return (grammar) }
-            |> wsff.Vertical
-            |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
-                                                                                Label = Some "SHOW GRAPH" 
-                                                                                Style = Some buttonStyle })
+                let! x = InputForm 
+                let! y = OutputForm x
+                return (y) }
+                |> wsff.Vertical 
 
-        let GraphInputForm  = 
-            wsff.Do {
-                let! graph = InputAreaControl "Graph" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Graph |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Graph grmName))
-                let! subgraphCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "Show formal subgraph" |> wsfe.WithLabelLeft
-                let! removeCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "Remove redundant nodes" |> wsfe.WithLabelLeft
-                return(graph,subgraphCheckbox,removeCheckbox)
-                }        
-            |> wsff.Vertical
-            |> wsfe.WithFormContainer
-                          
-//        let OutputForm ((grammar: string), ((graph: string), (subgraphCheckbox: bool),  (removeCheckbox: bool))) =  
-////            let VisualizationWithRangeForm = 
-////                let VisualizationForm  =                               
-//            wsff.Do {
-//                match GraphParsingRemote.draw grammar graph subgraphCheckbox removeCheckbox with
-//                | GraphParsingRemote.Result.Error msg ->
-//                    let! graphImg = OutputAreaControl ("Error:" + msg) "Graph Visualization"
-//                    let! sppfImg = OutputAreaControl ("Error:" + msg) "SPPF"
-//                    return (graphImg, sppfImg)
-//                | GraphParsingRemote.Result.SucTreeGraph (tree, graph) ->
-//                    let! graphImg = ShowGraphImageControl "Graph Visualization" graph "canvas1"
-//                    let! sppfImg = ShowTreeImageControl  "SPPF" tree "canvas2"
-//                    return (graphImg, sppfImg) 
-//                    }          
-//                |> wsfe.WithFormContainer 
-//                |> wsff.Horizontal  
-
-//                let RangeAndButtonForm  =
-//                        wsff.Do {
-//                            let! rng = RangeControl
-//                            return rng }                   
-//                        |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
-//                                                                                                    Label = Some "FIND PATH"
-//                                                                                                    Style = Some buttonStyle })   
-//                        |> wsff.Horizontal    
-//               
-//                wsff.Do {
-//                    let! x = VisualizationForm 
-//                    let! y = RangeAndButtonForm
-//                    return (x, y) }
-//                |> wsff.Vertical
-//////            
-//            let PathsVisualizationForm rng = 
-//                        wsff.Do {
-//                            if fst rng < snd rng && fst rng >= 0 && snd rng >= 0
-//                            then
-//                                match GraphParsingRemote.findMinLen grammar graph removeCheckbox (fst rng) (snd rng) with
-//                                | GraphParsingRemote.Result.Error msg ->
-//                                    let! pathImg = OutputAreaControl ("Error:" + msg) "Path"
-//                                    let! sppfPathImg = OutputAreaControl ("Error:" + msg) "SPPF Path" 
-//                                    return (pathImg, sppfPathImg)
-//                                | GraphParsingRemote.Result.SucTreeGraph (tree, graph) ->
-//                                    let! pathImg = ShowGraphImageControl "Path" graph "canvas3"
-//                                    let! sppfPathImg = ShowTreeImageControl "SPPF Path" tree "canvas4"
-//                                    return (pathImg, sppfPathImg)
-//                            else
-//                                let! pathImg = OutputAreaControl "Error: Incorrect range" "Path"
-//                                let! sppfPathImg = OutputAreaControl "Error: Incorrect range" "SPPF Path"
-//                                return (pathImg, sppfPathImg) } 
-//                        |> wsfe.WithFormContainer 
-//                        |> wsff.Horizontal 
-//////            
-//            wsff.Do {
-//                let! x = VisualizationWithRangeForm 
-//                let! y = PathsVisualizationForm (snd x)
-//                return (x, y) }
-//                |> wsff.Vertical  
-////                     
-//            wsff.Do {
-//                let! x = InputForm 
-////                let! y = OutputForm x
-//                return (x) }
-//                |> wsff.Vertical 
-
-//            wsff.Do {
-//                let! x = InputForm 
-//                return (x) }
-//                |> wsff.Vertical 
-
-        let FormRun () =
-            let LeftForm = GrammarInputForm.Run(fun _ -> ())
-            let RightForm = GraphInputForm.Run(fun _ -> ())
-
+        let MainFormRun () =
+            let InpForm = MainForm.Run(fun _ -> ())    
+                 
             Div [
                 Div [
-                    LeftForm
-                    ] -< [Attr.Class "col-md-6"]
-                Div [
-                    RightForm
-                    ] -< [Attr.Class "col-md-6"]
+                    InpForm
+                    ] -< [Attr.Align "center"]
             ] 
  
  //************BioGraph Page client-side block************//
@@ -399,29 +404,32 @@ module Client =
 //
 //            |> wsff.Horizontal
 
-        let InputForm = 
-            let InputGrammarForm = 
-                wsff.Do {
-                    let! grammar= InputAreaControl "Grammar" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Grammar |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Grammar grmName))
-                    let! strRange = RangeControl "String Range" "Min" "Max" 
-                    return (grammar,strRange)
-                    }
-//                    |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
-//                                                                                        Label = Some "GO" 
-//                                                                                        Style = Some buttonStyle })   
-                    |> wsff.Vertical   
-            let InputGraphForm = 
-                wsff.Do {
-                    let! graph = InputAreaControl "Graph" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Graph |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Graph grmName))
-                    let! drawGr = wsfc.Checkbox false |> wsfe.WithTextLabel "Draw Graph" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer
-                    return (graph, drawGr)
-                     } 
-                     |> wsff.Vertical                                                             
+//        let InputForm = 
+        let InputGrammarForm = 
             wsff.Do {
-                let! x = InputGrammarForm  
-                let! y = InputGraphForm
-                return (x, y) }
-              |> wsff.Horizontal                              
+                let! grammar= InputAreaControl "Grammar" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Grammar |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Grammar grmName))
+                let! strRange = RangeControl "String Range" "Min" "Max" 
+                return (grammar,strRange)
+                }
+                |> wsfe.WithFormContainer
+                |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
+                                                                                    Label = Some "GO" 
+                                                                                    Style = Some buttonStyle })   
+                |> wsff.Vertical   
+        let InputGraphForm = 
+            wsff.Do {
+                let! graph = InputAreaControl "Graph" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Graph |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Graph grmName))
+                let! drawGr = wsfc.Checkbox false |> wsfe.WithTextLabel "Draw Graph" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer
+                return (graph, drawGr)
+                    } 
+                    |> wsff.Vertical
+                    |> wsfe.WithFormContainer
+                                                                                  
+//            wsff.Do {
+//                let! x = InputGrammarForm  
+//                let! y = InputGraphForm
+//                return (x, y) }
+//              |> wsff.Horizontal                              
 // 
 //            let OutputForm (grm: string, graph: string, rng: int * int, drawGr: bool) =
 //                wsff.Do {
@@ -445,9 +453,16 @@ module Client =
 //              |> wsff.Horizontal
 //                                                                     
         let FormRun () =
-            let InpForm =
-                InputForm.Run(fun _ -> ())
-        
-            Div [      
-               InpForm
-            ]
+            let InpGrForm =
+                InputGrammarForm.Run(fun _ -> ())
+            let InpGraphForm =
+                InputGraphForm.Run(fun _ -> ())
+
+            Div [
+                Div [
+                    InpGrForm
+                    ] -< [Attr.Class "col-md-6"]
+                Div [
+                    InpGraphForm
+                    ] -< [Attr.Class "col-md-6"]
+            ] 

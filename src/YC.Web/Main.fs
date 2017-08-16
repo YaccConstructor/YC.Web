@@ -108,7 +108,7 @@ module Site =
                 ] -< [Attr.Class "jumbotron"]
             Div [
                 ClientSide <@ Client.BioGraphApp.FormRun () @>
-             ]
+             ] -< [Attr.Align "center"]
         ]
 
     let GraphParsingDemoPage ctx =
@@ -117,7 +117,7 @@ module Site =
                  H1 [Text "GraphParsing Application"] -< [Attr.Align "center"]
                  ] -< [Attr.Class "jumbotron"]
             Div [
-                ClientSide <@ Client.GraphParsingApp.FormRun () @>
+                ClientSide <@ Client.GraphParsingApp.MainFormRun () @>
              ]   -< [Attr.Align "center"]
               
        ]
