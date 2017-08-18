@@ -1,5 +1,6 @@
 namespace YC.Web
 
+
 type Nuc = | A | C | G | U
 
 type Edge = int * int * Nuc * bool
@@ -8,7 +9,6 @@ type Graph = {
     countOfVertex: int;
     edges: Edge[];
 }
-
 
 open WebSharper
 open Yard.Frontends.YardFrontend.Main
@@ -23,7 +23,7 @@ open System.Collections.Generic
 open Yard.Generators.GLL
 open Yard.Generators.Common
 
-//=========GraphParsing server-side block=========//
+//************GraphParsing server-side block************//
 module GraphParsingFunctions =
 
     type InputEdge = int * int * string * bool
@@ -645,9 +645,8 @@ module GraphParsingFunctions =
         f tree.Root false [] |> ignore
         tree
 
-//=========BioGraph server-side block=========//
+//************BioGraph server-side block************//
 module BioGraphFunctions =
-
 
     type Token =
         | A
