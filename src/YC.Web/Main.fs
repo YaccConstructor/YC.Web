@@ -7,7 +7,6 @@ type EndPoint =
     | [<EndPoint "/">] Home
     | [<EndPoint "/BioGraph">] BioGraph
     | [<EndPoint "/GraphParsingDemo">] GraphParsingDemo
-    | [<EndPoint "/RecursiveAutomata">] RecursiveAutomata
     | [<EndPoint "/graph"; Wildcard>] Graph of countOfVertex:int * edges: array<int * int * string * int>
 
 module Templating =
@@ -45,7 +44,7 @@ module Templating =
              ]
         [
             LI ["Home" => EndPoint.Home]
-            LI [A [Attr.HRef "https://github.com/YaccConstructor/YC.Web"] -< [Text "Documentation"] ]
+            LI [A [Attr.HRef "https://shalamovroman.github.io/YC.Web/"] -< [Text "Documentation"] ]
         ]
 
     let Main ctx endpoint title body : Async<Content<EndPoint>> =
@@ -92,11 +91,6 @@ module Site =
                         P [Text "Web application for graph parsing and visualization. This app also can extract the minimal length path between two specified verteces."]
                         P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.GraphParsingDemo)] -< [Attr.Class "btn btn-default"]]
                         ] -< [Attr.Class "col-md-4"]
-                    Div [
-                        H2 [Text "Recursive automata"] 
-                        P [Text "Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus."]
-                        P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.RecursiveAutomata)] -< [Attr.Class "btn btn-default"]]
-                        ] -< [Attr.Class "col-md-4"]
                     ] -< [Attr.Class "row"]
                 ] -< [Attr.Class "container"]            
         ]
@@ -107,7 +101,7 @@ module Site =
                 H1 [Text "BioGraph page"] -< [Attr.Align "center"]
                 ] -< [Attr.Class "jumbotron"]
             Div [
-                ClientSide <@ Client.BioGraphApp.MainFormRun () @>
+                ClientSide <@ BioGraphClient.MainFormRun () @>
              ] -< [Attr.Align "center"]
         ]
 
@@ -117,17 +111,10 @@ module Site =
                  H1 [Text "GraphParsing Application"] -< [Attr.Align "center"]
                  ] -< [Attr.Class "jumbotron"]
             Div [
-                ClientSide <@ Client.GraphParsingApp.MainFormRun () @>
+                ClientSide <@ GraphParsingClient.MainFormRun () @>
              ]   -< [Attr.Align "center"]
               
        ]
-
-    let RecursiveAutomataPage ctx =
-       Templating.Main ctx EndPoint.RecursiveAutomata "RecursiveAutomata" [
-            Div [
-                H1 [Text "RecursiveAutomata page"] -< [Attr.Align "center"]
-                ] -< [Attr.Class "jumbotron"]
-        ]
 
     let GraphPage g i =
         Templating.Graph "Graph" [
@@ -141,6 +128,5 @@ module Site =
             | EndPoint.Home -> HomePage ctx
             | EndPoint.BioGraph -> BioGraphPage ctx
             | EndPoint.GraphParsingDemo -> GraphParsingDemoPage ctx
-            | EndPoint.RecursiveAutomata -> RecursiveAutomataPage ctx
             | EndPoint.Graph (i, g) -> GraphPage g i
         )
