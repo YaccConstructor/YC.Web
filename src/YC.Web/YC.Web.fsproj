@@ -115,9 +115,11 @@
     </VisualStudio>
   </ProjectExtensions>
   <ItemGroup>
-    <Compile Include="Parser.fs" />
-    <Compile Include="Remoting.fs" />
-    <Compile Include="Client.fs" />
+    <Compile Include="BioGraphServer.fs" />
+    <Compile Include="GraphParsingServer.fs" />
+    <Compile Include="WebComponents.fs" />
+    <Compile Include="GraphParsingClient.fs" />
+    <Compile Include="BioGraphClient.fs" />
     <Compile Include="Main.fs" />
     <Content Include="Main.html" />
     <Content Include="Web.config" />
