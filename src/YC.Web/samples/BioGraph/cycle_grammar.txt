@@ -1,0 +1,4 @@
+[<Start>]
+    s: a | d s
+    a: A
+    d: U

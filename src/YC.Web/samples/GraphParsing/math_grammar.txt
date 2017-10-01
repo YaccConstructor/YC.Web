@@ -1,0 +1,4 @@
+[<Start>]
+    s: s P n | n
+    n: n M y | y
+    y: L s R | INT

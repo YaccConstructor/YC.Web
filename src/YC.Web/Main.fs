@@ -85,14 +85,14 @@ module Site =
                         H2 [Text "BioGraph"]
                         P [Text "Web application for searching subpaths in the metagenomic sequences. This app also visualizes the obtained sequences on input graph."]
                         P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.BioGraph)] -< [Attr.Class "btn btn-default"] ]
-                        ] -< [Attr.Class "col-md-4"]
+                        ] -< [Attr.Class "col-md-6"]
                     Div [
-                        H2 [Text "GraphParsingDemo"] 
+                        H2 [Text "GraphParsingDemo"]
                         P [Text "Web application for graph parsing and visualization. This app also can extract the minimal length path between two specified verteces."]
                         P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.GraphParsingDemo)] -< [Attr.Class "btn btn-default"]]
-                        ] -< [Attr.Class "col-md-4"]
+                        ] -< [Attr.Class "col-md-6"]
                     ] -< [Attr.Class "row"]
-                ] -< [Attr.Class "container"]            
+                ] -< [Attr.Class "container"] -< [Attr.Align "center"]          
         ]
 
     let BioGraphPage ctx =

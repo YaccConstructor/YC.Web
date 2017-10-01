@@ -1,0 +1,16 @@
+digraph {
+        0 -> 1 [label = L]
+        1 -> 2 [label = INT]
+        2 -> 3 [label = P]
+        3 -> 4 [label = INT]
+        1 -> 5 [label = INT]
+        5 -> 6 [label = M]
+        6 -> 7 [label = INT]
+        7 -> 8 [label = P]
+        8 -> 4 [label = INT]
+        4 -> 9 [label = R]
+        9 -> 10 [label = M]
+        10 -> 11 [label = INT]
+        11 -> 12 [label = P]
+        12 -> 13 [label = INT]            
+    }
