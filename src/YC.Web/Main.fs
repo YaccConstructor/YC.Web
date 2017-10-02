@@ -44,7 +44,7 @@ module Templating =
              ]
         [
             LI ["Home" => EndPoint.Home]
-            LI [A [Attr.HRef "https://shalamovroman.github.io/YC.Web/"] -< [Text "Documentation"] ]
+            LI [A [Attr.HRef "http://yaccconstructor.github.io/YC.Web/"] -< [Text "Documentation"] ]
         ]
 
     let Main ctx endpoint title body : Async<Content<EndPoint>> =

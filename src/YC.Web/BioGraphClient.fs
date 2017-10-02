@@ -38,9 +38,9 @@ module BioGraphClient =
                                 |C -> "C"
                                 |G -> "G"  
                        
-                        arr.[indx] <-
-                            match graphOption.edges.[indx] with
-                                | a, b, c, d -> a,b,f1 c, d
+                        arr.[indx] <- match graphOption.edges.[indx] with
+                                      | a, b, c, d -> a,b,f1 c, d
+
                     wsff.OfElement(fun () -> Graph "Graph Visualization" (arr, graphOption.countOfVertex) (Div [Attr.Id id]))
 
             | (Some(graphOption), false) -> wsff.OfElement (fun () -> Img [Attr.Hidden "true"]) 
