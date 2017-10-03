@@ -2,7 +2,10 @@ namespace YC.Web
 
 open WebSharper
 open WebSharper.Sitelets
+open WebComponents.MainPageComponents
 
+
+//Add here reference for new algorithm
 type EndPoint =
     | [<EndPoint "/">] Home
     | [<EndPoint "/BioGraph">] BioGraph
@@ -25,6 +28,7 @@ module Templating =
             Body : list<Element>
         }
 
+    //Structure of all pages in application
     let MainTemplate =
         Content.Template<Page>("~/Main.html")
             .With("title", fun x -> x.Title)
@@ -82,14 +86,14 @@ module Site =
             Div [ 
                 Div [
                     Div [
-                        H2 [Text "BioGraph"]
-                        P [Text "Web application for searching subpaths in the metagenomic sequences. This app also visualizes the obtained sequences on input graph."]
-                        P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.BioGraph)] -< [Attr.Class "btn btn-default"] ]
+                        AlgorithmInfo.Name "Biograph"
+                        AlgorithmInfo.Description "Web application for searching subpaths in the metagenomic sequences. This app also visualizes the obtained sequences on input graph."
+                        AlgorithmInfo.ButtonLink (ctx.Link EndPoint.BioGraph)
                         ] -< [Attr.Class "col-md-6"]
                     Div [
-                        H2 [Text "GraphParsingDemo"]
-                        P [Text "Web application for graph parsing and visualization. This app also can extract the minimal length path between two specified verteces."]
-                        P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.GraphParsingDemo)] -< [Attr.Class "btn btn-default"]]
+                        AlgorithmInfo.Name "GraphParsingDemo"
+                        AlgorithmInfo.Description "Web application for graph parsing and visualization. This app also can extract the minimal length path between two specified verteces."
+                        AlgorithmInfo.ButtonLink (ctx.Link EndPoint.GraphParsingDemo) 
                         ] -< [Attr.Class "col-md-6"]
                     ] -< [Attr.Class "row"]
                 ] -< [Attr.Class "container"] -< [Attr.Align "center"]          

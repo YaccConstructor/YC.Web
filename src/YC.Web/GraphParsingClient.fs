@@ -8,7 +8,7 @@ open WebSharper.UI.Next.Client
 open WebSharper.UI.Next.Html
 open WebSharper.UI.Next.Server
 open WebSharper.Formlets
-open WebComponents
+open WebComponents.AlgorithmsComponents
 open GraphParsingServer
 
 module wsfc = WebSharper.Formlets.Controls
