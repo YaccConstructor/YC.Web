@@ -1,0 +1,4 @@
+digraph {
+        0 -> 1 [label = U]
+        1 -> 2 [label = C]
+    }

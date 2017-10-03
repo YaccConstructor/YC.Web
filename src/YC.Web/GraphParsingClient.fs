@@ -8,7 +8,7 @@ open WebSharper.UI.Next.Client
 open WebSharper.UI.Next.Html
 open WebSharper.UI.Next.Server
 open WebSharper.Formlets
-open WebComponents
+open WebComponents.AlgorithmsComponents
 open GraphParsingServer
 
 module wsfc = WebSharper.Formlets.Controls
@@ -47,14 +47,16 @@ module GraphParsingClient =
         let InputForm = 
             let GrammarInputForm =         
                 wsff.Do {
-                    let! grammar = InputAreaControl "Grammar" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Grammar |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Grammar grmName))
+                    let! grammar = InputAreaControl "Grammar" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Grammar
+                        |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Grammar grmName))
                     return (grammar) 
                     }
                 |> wsff.Vertical
                 |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"tomiddle"})
             let GraphInputForm  = 
                 wsff.Do {
-                    let! graph = InputAreaControl "Graph" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Graph |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Graph grmName))
+                    let! graph = InputAreaControl "Graph" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Graph 
+                        |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Graph grmName))
                     let! subgraphCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "Show formal subgraph" |> wsfe.WithLabelLeft
                     let! removeCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "Remove redundant nodes" |> wsfe.WithLabelLeft 
                     return(graph,subgraphCheckbox,removeCheckbox)

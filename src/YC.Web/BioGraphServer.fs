@@ -22,6 +22,8 @@ open Yard.Generators.GLL.ParserCommon
 open System.Collections.Generic
 open Yard.Generators.GLL
 open Yard.Generators.Common
+open System
+open System.IO
 
 module BioGraphServer = 
 
@@ -297,6 +299,10 @@ module BioGraphServer =
             }
 
 //************BioGraph remoting block************//
+    //Server paths for examples
+    module Path =
+        let appDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase
+        let makeAppRelative fileName = System.IO.Path.Combine(appDir, fileName)
 
     module BioGraphRemote =
         type FileType =
@@ -314,13 +320,11 @@ module BioGraphServer =
                 [
                     "lite"
                     "cycle"
-                    "brackets"
                 ]
             | Graph ->
                 [
                     "lite"
                     "cycle"
-                    "brackets"
                 ]
 
         [<Rpc>]
@@ -328,44 +332,25 @@ module BioGraphServer =
             match fileType with
             | Grammar ->
                 match name with
-                | "lite" -> @"[<Start>]
-    s: a b | b c | d
-    a: A
-    b: C
-    c: G
-    d: U"
-                | "cycle" -> @"[<Start>]
-    s: a | d s
-    a: A
-    d: U"
-                | "brackets" -> @"[<Start>]
-    s: d s | d
-    d: f | e
-    f: A s U
-    e: C"
+                | "lite" -> 
+                    let fullPath = Path.makeAppRelative "samples/BioGraph/lite_grammar.txt"
+                    File.ReadAllText(fullPath)
+
+                | "cycle" -> 
+                    let fullPath = Path.makeAppRelative "samples/BioGraph/cycle_grammar.txt"
+                    File.ReadAllText(fullPath)
+
                 |  _  -> ""
+
             | Graph ->
                 match name with
-                | "lite" -> @"digraph {
-        0 -> 1 [label = U]
-        1 -> 2 [label = C]
-    }"
-                | "cycle" -> @"digraph {
-        0 -> 1 [label = U]
-        1 -> 0 [label = U]
-        1 -> 2 [label = A]
-    }"
-                | "brackets" -> @"digraph {
-        0 -> 0 [label = U]
-        1 -> 1 [label = U]
-        2 -> 2 [label = U]
-        0 -> 1 [label = A]
-        1 -> 2 [label = A]
-        2 -> 0 [label = A]
-        0 -> 2 [label = C]
-        1 -> 0 [label = C]
-        2 -> 1 [label = C]
-    }"
+                | "lite" -> 
+                    let fullPath = Path.makeAppRelative "samples/BioGraph/lite_graph.txt"
+                    File.ReadAllText(fullPath)
+
+                | "cycle" -> 
+                    let fullPath = Path.makeAppRelative "samples/BioGraph/cycle_graph.txt"
+                    File.ReadAllText(fullPath)
                 |  _  -> ""
 
         [<Rpc>]

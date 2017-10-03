@@ -12,6 +12,8 @@ open Yard.Generators.GLL.ParserCommon
 open System.Collections.Generic
 open Yard.Generators.GLL
 open Yard.Generators.Common
+open System 
+open System.IO
 
 module GraphParsingServer = 
 
@@ -639,6 +641,10 @@ module GraphParsingServer =
 
 //************GraphParsing remoting block************//
     module GraphParsingRemote = 
+        
+        module Path =
+            let appDir = AppDomain.CurrentDomain.SetupInformation.ApplicationBase
+            let makeAppRelative fileName = System.IO.Path.Combine(appDir, fileName)
 
         type Result =
             | SucTreeGraph of GraphParsingFunctions.ParsedSppf * GraphParsingFunctions.InputGraph
@@ -666,39 +672,21 @@ module GraphParsingServer =
             match fileType with
             | Grammar ->
                 match name with
-                | "Math" -> @"[<Start>]
-    s: s P n | n
-    n: n M y | y
-    y: L s R | INT"
-                | "Bio" -> @"[<Start>]
-    s: a b | b c | d
-    a: A
-    b: C
-    c: G
-    d: U"
+                | "Math" ->
+                    let fullPath = Path.makeAppRelative "samples/GraphParsing/math_grammar.txt"
+                    File.ReadAllText(fullPath)
+                | "Bio" ->
+                    let fullPath = Path.makeAppRelative "samples/GraphParsing/bio_grammar.txt"
+                    File.ReadAllText(fullPath)
                 |  _  -> ""
             | Graph ->
                 match name with
-                | "Math" -> @"digraph {
-        0 -> 1 [label = L]
-        1 -> 2 [label = INT]
-        2 -> 3 [label = P]
-        3 -> 4 [label = INT]
-        1 -> 5 [label = INT]
-        5 -> 6 [label = M]
-        6 -> 7 [label = INT]
-        7 -> 8 [label = P]
-        8 -> 4 [label = INT]
-        4 -> 9 [label = R]
-        9 -> 10 [label = M]
-        10 -> 11 [label = INT]
-        11 -> 12 [label = P]
-        12 -> 13 [label = INT]            
-    }"
-                | "Bio" -> @"digraph {
-        0 -> 1 [label = A]
-        1 -> 2 [label = C]            
-    }"
+                | "Math" -> 
+                    let fullPath = Path.makeAppRelative "samples/GraphParsing/math_graph.txt"
+                    File.ReadAllText(fullPath)
+                | "Bio" ->
+                    let fullPath = Path.makeAppRelative "samples/GraphParsing/bio_graph.txt"
+                    File.ReadAllText(fullPath)
                 |  _  -> ""
 
         [<Rpc>]
