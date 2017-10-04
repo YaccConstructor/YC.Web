@@ -28,7 +28,7 @@ module GraphParsingClient =
         let button = Button [Text lbl; Attr.Style hw]
         canvas.OnClick (fun _ _ -> 
             canvas.Clear()
-            JS.Window?draw(JS.Window?createTree g c canvas.Id) canvas.Id graphSize) 
+            JS.Window?draw(JS.Window?createTree g c canvas.Id) canvas.Id graphSize) |> ignore
         button.OnClick (fun _ _ -> 
             JS.Window?draw(JS.Window?createTree g c canvas.Id) canvas.Id graphSize
             button.Remove()) 
@@ -95,7 +95,7 @@ module GraphParsingClient =
                                                                                                 Label = Some "FIND PATH"
                                                                                                 Style = Some buttonStyle })  
                     |> wsff.Horizontal    
-               
+                    |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"todown"})
                 wsff.Do {
                     let! x = VisualizationForm 
                     let! y = RangeAndButtonForm

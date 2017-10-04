@@ -58,16 +58,11 @@ module WebComponents =
                 e)
 
         let graphSize = 540 * screenWidth / 1366
+        let graphSize2 = int ((setFormWidth 0.4).Replace("px",""))
 
         //Size for input/output forms
         let formW = setFormWidth 0.4
         let formH = setFormHeight 0.15
-
-//        let formH = fst(getFormSize 90 540)
-//        let formW = snd(getFormSize 90 540)
-//        let formW = string (double (screenWidth) * 0.4) + "px"
-//        let getFormSize (height: int) (width: int) = 
-//            ((height * screenHeight / 638).ToString() + "px", (width * screenWidth / 1366).ToString() + "px")
         
         let buttonStyle = "padding-top: 0px;
                         background-color: #FF69B4; 
@@ -76,9 +71,9 @@ module WebComponents =
                         border-color: #000000; 
                         border-radius: 10px; 
                         color: #000000; 
-                        height: " + setFormHeight 0.07 + "px; 
-                        width: " + setFormWidth 0.03 + "px; 
-                        font-size:" + setFormHeight 0.01; 
+                        height: " + setFormHeight 0.05 + "; 
+                        width: " + setFormWidth 0.06 + "; 
+                        font-size:" + setFormHeight 0.02; 
   
     //************Drop down menu with default values************// 
 
@@ -164,10 +159,10 @@ module WebComponents =
             let button = Button [Text lbl; Attr.Style hw]
             canvas.OnClick (fun _ _ -> 
                 canvas.Clear()
-                JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize) 
+                JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize2) 
             button.OnClick (fun _ _ -> 
-                JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize
-                button.Remove())     
+                JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize2
+                button.Remove())      
             Div [
                 canvas
                 button
