@@ -7,20 +7,24 @@ module WebComponents =
     
     module MainPageComponents = 
         open WebSharper.Html.Server
-        module AlgorithmInfo = 
-        //Name, description and button for new algorithm
-            let Name str = 
+        type AlgorithmInfo = 
+            {
+            Name : string
+            Description : string
+            Link : string
+            }
+            member this.CreateForm() = 
                 Div [
-                     H2 [Text str]                 
-                     ]
-            let Description str = 
-                Div [
-                    P [Text str]
-                    ]
-            let ButtonLink (str: string) = 
-                Div [
-                    P [ A [Text "Try app"] -< [Attr.HRef str] -< [Attr.Class "btn btn-default"]]
-                    ]
+                        Div [
+                            H2 [Text this.Name]                 
+                          ]
+                        Div [
+                           P [Text this.Description]
+                           ] 
+                        Div [
+                            P [ A [Text "Try app"] -< [Attr.HRef this.Link] -< [Attr.Class "btn btn-default"]]
+                            ]
+                        ] -< [Attr.Class "col-md-6"]
 
     [<JavaScript>]
     module AlgorithmsComponents = 
@@ -57,17 +61,11 @@ module WebComponents =
                     .Ignore
                 e)
 
-        let graphSize = 540 * screenWidth / 1366
+        let graphSize = int ((setFormWidth 0.4).Replace("px",""))
 
         //Size for input/output forms
         let formW = setFormWidth 0.4
         let formH = setFormHeight 0.15
-
-//        let formH = fst(getFormSize 90 540)
-//        let formW = snd(getFormSize 90 540)
-//        let formW = string (double (screenWidth) * 0.4) + "px"
-//        let getFormSize (height: int) (width: int) = 
-//            ((height * screenHeight / 638).ToString() + "px", (width * screenWidth / 1366).ToString() + "px")
         
         let buttonStyle = "padding-top: 0px;
                         background-color: #FF69B4; 
@@ -76,9 +74,9 @@ module WebComponents =
                         border-color: #000000; 
                         border-radius: 10px; 
                         color: #000000; 
-                        height: " + setFormHeight 0.07 + "px; 
-                        width: " + setFormWidth 0.03 + "px; 
-                        font-size:" + setFormHeight 0.01; 
+                        height: " + setFormHeight 0.05 + "; 
+                        width: " + setFormWidth 0.06 + "; 
+                        font-size:" + setFormHeight 0.02; 
   
     //************Drop down menu with default values************// 
 
@@ -167,7 +165,7 @@ module WebComponents =
                 JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize) 
             button.OnClick (fun _ _ -> 
                 JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize
-                button.Remove())     
+                button.Remove())      
             Div [
                 canvas
                 button
