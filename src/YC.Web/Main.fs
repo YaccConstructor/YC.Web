@@ -12,6 +12,7 @@ type EndPoint =
     | [<EndPoint "/GraphParsingDemo">] GraphParsingDemo
     | [<EndPoint "/graph"; Wildcard>] Graph of countOfVertex:int * edges: array<int * int * string * int>
 
+
 module Templating =
     open WebSharper.Html.Server
 
@@ -27,7 +28,7 @@ module Templating =
             Title : string
             Body : list<Element>
         }
-
+     
     //Structure of all pages in application
     let MainTemplate =
         Content.Template<Page>("~/Main.html")
@@ -85,20 +86,24 @@ module Site =
                 ] -< [Attr.Class "jumbotron"]
             Div [ 
                 Div [
-                    Div [
-                        AlgorithmInfo.Name "Biograph"
-                        AlgorithmInfo.Description "Web application for searching subpaths in the metagenomic sequences. This app also visualizes the obtained sequences on input graph."
-                        AlgorithmInfo.ButtonLink (ctx.Link EndPoint.BioGraph)
-                        ] -< [Attr.Class "col-md-6"]
-                    Div [
-                        AlgorithmInfo.Name "GraphParsingDemo"
-                        AlgorithmInfo.Description "Web application for graph parsing and visualization. This app also can extract the minimal length path between two specified verteces."
-                        AlgorithmInfo.ButtonLink (ctx.Link EndPoint.GraphParsingDemo) 
-                        ] -< [Attr.Class "col-md-6"]
+                    //Creates algorithm form in main page                    
+                    let BioGraphForm = {
+                              Name = "Biograph"; 
+                              Description =  "Web application for searching subpaths in the metagenomic sequences. This app also visualizes the obtained sequences on input graph."; 
+                              Link = (ctx.Link EndPoint.BioGraph)
+                            }
+                    yield (BioGraphForm.CreateForm())
+
+                    let GraphParsingForm = {
+                              Name = "GraphParsingDemo"; 
+                              Description = "Web application for graph parsing and visualization. This app also can extract the minimal length path between two specified verteces."; 
+                              Link = (ctx.Link EndPoint.GraphParsingDemo)
+                            }
+                    yield (GraphParsingForm.CreateForm())
                     ] -< [Attr.Class "row"]
                 ] -< [Attr.Class "container"] -< [Attr.Align "center"]          
         ]
-
+    
     let BioGraphPage ctx =
         Templating.Main ctx EndPoint.BioGraph "BioGraph" [
             Div [

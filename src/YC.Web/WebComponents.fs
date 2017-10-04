@@ -7,20 +7,24 @@ module WebComponents =
     
     module MainPageComponents = 
         open WebSharper.Html.Server
-        module AlgorithmInfo = 
-        //Name, description and button for new algorithm
-            let Name str = 
+        type AlgorithmInfo = 
+            {
+            Name : string
+            Description : string
+            Link : string
+            }
+            member this.CreateForm() = 
                 Div [
-                     H2 [Text str]                 
-                     ]
-            let Description str = 
-                Div [
-                    P [Text str]
-                    ]
-            let ButtonLink (str: string) = 
-                Div [
-                    P [ A [Text "Try app"] -< [Attr.HRef str] -< [Attr.Class "btn btn-default"]]
-                    ]
+                        Div [
+                            H2 [Text this.Name]                 
+                          ]
+                        Div [
+                           P [Text this.Description]
+                           ] 
+                        Div [
+                            P [ A [Text "Try app"] -< [Attr.HRef this.Link] -< [Attr.Class "btn btn-default"]]
+                            ]
+                        ] -< [Attr.Class "col-md-6"]
 
     [<JavaScript>]
     module AlgorithmsComponents = 
@@ -57,8 +61,7 @@ module WebComponents =
                     .Ignore
                 e)
 
-        let graphSize = 540 * screenWidth / 1366
-        let graphSize2 = int ((setFormWidth 0.4).Replace("px",""))
+        let graphSize = int ((setFormWidth 0.4).Replace("px",""))
 
         //Size for input/output forms
         let formW = setFormWidth 0.4
@@ -159,9 +162,9 @@ module WebComponents =
             let button = Button [Text lbl; Attr.Style hw]
             canvas.OnClick (fun _ _ -> 
                 canvas.Clear()
-                JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize2) 
+                JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize) 
             button.OnClick (fun _ _ -> 
-                JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize2
+                JS.Window?draw(JS.Window?createGraph g c canvas.Id) canvas.Id graphSize
                 button.Remove())      
             Div [
                 canvas

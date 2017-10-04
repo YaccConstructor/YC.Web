@@ -103,7 +103,6 @@ module BioGraphClient =
                                                                      
     let MainFormRun () =
         let Form = MainForm.Run(fun _ -> ())
-
         Div [
             Form 
         ] 
