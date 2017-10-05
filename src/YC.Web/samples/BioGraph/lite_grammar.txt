@@ -1,0 +1,6 @@
+[<Start>]
+    s: a b | b c | d
+    a: A
+    b: C
+    c: G
+    d: U

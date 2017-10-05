@@ -2,12 +2,16 @@ namespace YC.Web
 
 open WebSharper
 open WebSharper.Sitelets
+open WebComponents.MainPageComponents
 
+
+//Add here reference for new algorithm
 type EndPoint =
     | [<EndPoint "/">] Home
     | [<EndPoint "/BioGraph">] BioGraph
     | [<EndPoint "/GraphParsingDemo">] GraphParsingDemo
-    | [<EndPoint "/RecursiveAutomata">] RecursiveAutomata
+    | [<EndPoint "/graph"; Wildcard>] Graph of countOfVertex:int * edges: array<int * int * string * int>
+
 
 module Templating =
     open WebSharper.Html.Server
@@ -19,10 +23,22 @@ module Templating =
             Body : list<Element>
         }
 
+    type GraphPage =
+        {
+            Title : string
+            Body : list<Element>
+        }
+     
+    //Structure of all pages in application
     let MainTemplate =
         Content.Template<Page>("~/Main.html")
             .With("title", fun x -> x.Title)
             .With("menubar", fun x -> x.MenuBar)
+            .With("body", fun x -> x.Body)
+ 
+    let GraphTemplate =
+        Content.Template<GraphPage>("~/Graph.html")
+            .With("title", fun x -> x.Title)
             .With("body", fun x -> x.Body)
 
     // Compute a menubar where the menu item for the given endpoint is active
@@ -33,7 +49,7 @@ module Templating =
              ]
         [
             LI ["Home" => EndPoint.Home]
-            LI [A [Attr.HRef "https://github.com/YaccConstructor/YC.Web"] -< [Text "Documentation"] ]
+            LI [A [Attr.HRef "http://yaccconstructor.github.io/YC.Web/"] -< [Text "Documentation"] ]
         ]
 
     let Main ctx endpoint title body : Async<Content<EndPoint>> =
@@ -41,6 +57,13 @@ module Templating =
             {
                 Title = title
                 MenuBar = MenuBar ctx 
+                Body = body
+            }
+
+    let Graph title body =
+        Content.WithTemplate GraphTemplate
+            {
+                Title = title
                 Body = body
             }
 
@@ -63,47 +86,50 @@ module Site =
                 ] -< [Attr.Class "jumbotron"]
             Div [ 
                 Div [
-                    Div [
-                        H2 [Text "Biograph"]
-                        P [Text "Web application for searching subpaths in the metagenomic sequences. This app also visualizes the obtained sequences on input graph."]
-                        P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.BioGraph)] -< [Attr.Class "btn btn-default"] ]
-                        ] -< [Attr.Class "col-md-4"]
-                    Div [
-                        H2 [Text "GraphParsingDemo"] 
-                        P [Text "Web application for graph parsing and visualization. This app also can extract the minimal length path between two specified verteces."]
-                        P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.GraphParsingDemo)] -< [Attr.Class "btn btn-default"]]
-                        ] -< [Attr.Class "col-md-4"]
-                    Div [
-                        H2 [Text "Recursive automata"] 
-                        P [Text "Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus."]
-                        P [ A [Text "Try app"] -< [Attr.HRef (ctx.Link EndPoint.RecursiveAutomata)] -< [Attr.Class "btn btn-default"]]
-                        ] -< [Attr.Class "col-md-4"]
-                    ] -< [Attr.Class "row"]
-                ] -< [Attr.Class "container"]
-            
-        ]
+                    //Creates algorithm form in main page                    
+                    let BioGraphForm = {
+                              Name = "Biograph"; 
+                              Description =  "Web application for searching subpaths in the metagenomic sequences. This app also visualizes the obtained sequences on input graph."; 
+                              Link = (ctx.Link EndPoint.BioGraph)
+                            }
+                    yield (BioGraphForm.CreateForm())
 
+                    let GraphParsingForm = {
+                              Name = "GraphParsingDemo"; 
+                              Description = "Web application for graph parsing and visualization. This app also can extract the minimal length path between two specified verteces."; 
+                              Link = (ctx.Link EndPoint.GraphParsingDemo)
+                            }
+                    yield (GraphParsingForm.CreateForm())
+                    ] -< [Attr.Class "row"]
+                ] -< [Attr.Class "container"] -< [Attr.Align "center"]          
+        ]
+    
     let BioGraphPage ctx =
         Templating.Main ctx EndPoint.BioGraph "BioGraph" [
             Div [
                 H1 [Text "BioGraph page"] -< [Attr.Align "center"]
                 ] -< [Attr.Class "jumbotron"]
+            Div [
+                ClientSide <@ BioGraphClient.MainFormRun () @>
+             ] -< [Attr.Align "center"]
         ]
 
     let GraphParsingDemoPage ctx =
        Templating.Main ctx EndPoint.GraphParsingDemo "GraphParsingDemo" [
             Div [
-                H1 [Text "GraphParsing page"] -< [Attr.Align "center"]
-                ] -< [Attr.Class "jumbotron"]
+                 H1 [Text "GraphParsing Application"] -< [Attr.Align "center"]
+                 ] -< [Attr.Class "jumbotron"]
+            Div [
+                ClientSide <@ GraphParsingClient.MainFormRun () @>
+             ]   -< [Attr.Align "center"]
+              
        ]
 
-    let RecursiveAutomataPage ctx =
-       Templating.Main ctx EndPoint.RecursiveAutomata "RecursiveAutomata" [
-            Div [
-                H1 [Text "Recursive Automata page"] -< [Attr.Align "center"]
-                ] -< [Attr.Class "jumbotron"]
-       ]
- 
+    let GraphPage g i =
+        Templating.Graph "Graph" [
+            Div [Attr.Id "canvas"; Attr.Height "height"; Attr.Width "width"]
+        ]
+
     [<Website>]
     let Main =
         Application.MultiPage (fun ctx endpoint ->
@@ -111,5 +137,5 @@ module Site =
             | EndPoint.Home -> HomePage ctx
             | EndPoint.BioGraph -> BioGraphPage ctx
             | EndPoint.GraphParsingDemo -> GraphParsingDemoPage ctx
-            | EndPoint.RecursiveAutomata -> RecursiveAutomataPage ctx
+            | EndPoint.Graph (i, g) -> GraphPage g i
         )
