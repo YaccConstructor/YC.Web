@@ -7,16 +7,7 @@
 Adding new algorithm
 ========================
 
-To create new algorithm page add to project two files: 
-*) 
-
-AlgorithmNameClient.fs 
-(** 
-and 
-*) 
-AlgorithmNameServer.fs 
-
-(**
+To create new algorithm page add to project two files: `AlgorithmNameClient.fs` and `AlgorithmNameServer.fs` 
 
 Then edit next type adding link for new page: 
 
@@ -40,8 +31,9 @@ let NewPageLink ctx =
             ]   -< [Attr.Align "center"]
 
 (**
-Where "NewPage.MainFormRun ()" is a form that you have to run from NewPageClient.fs file using WebComponents module.
-<img src="files/img/img2.png" alt="2"/>
+Where `ewPage.MainFormRun ()` is a form that you have to run from `NewPageClient.fs` file using `WebComponents` module.
+
+<img src="img/img2.png" alt="2"/>
 
 To add descriptional form for you algorithm on main page add next code:
 *)
@@ -53,7 +45,7 @@ let NewPageForm = {
 yield (NewPage.CreateForm())
 
 (**
-<img src="files/img/img1.png" alt="1"/>
+<img src="img/img1.png" alt="1"/>
 *)
 
     
