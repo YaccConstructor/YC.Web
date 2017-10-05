@@ -7,32 +7,26 @@
 YC.Web
 ======================
 
-Documentation
+
+
+YC.Web is a web application for [YaccConstructor][yaccconstructor]. It contains components for visualization algorithms.
+ 
+
+
 
 <div class="row">
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      The YC.Web library can be <a href="https://nuget.org/packages/YC.Web">installed from NuGet</a>:
-      <pre>PM> Install-Package YC.Web</pre>
+      Use the YC.Web web application :
+      <pre><a href="https://nuget.org/packages/YC.Web">AppHarbor reference </a></pre>
     </div>
   </div>
   <div class="span1"></div>
 </div>
 
-Example
--------
+ You can read how to visualize new algorithm on [tutorial page](tutorial.html).
 
-This example demonstrates using a function defined in this sample library.
-
-*)
-#r "YC.Web.dll"
-open YC.Web
-
-printfn "hello = %i" <| Library.hello 0
-
-(**
-Some more info
 
 Samples & documentation
 -----------------------
@@ -59,9 +53,10 @@ The library is available under Public Domain license, which allows modification 
 redistribution for both commercial and non-commercial purposes. For more information see the 
 [License file][license] in the GitHub repository. 
 
-  [content]: https://github.com/fsprojects/YC.Web/tree/master/docs/content
-  [gh]: https://github.com/fsprojects/YC.Web
-  [issues]: https://github.com/fsprojects/YC.Web/issues
-  [readme]: https://github.com/fsprojects/YC.Web/blob/master/README.md
-  [license]: https://github.com/fsprojects/YC.Web/blob/master/LICENSE.txt
+  [yaccconstructor]: https://github.com/YaccConstructor/YaccConstructor
+  [content]: https://github.com/YaccConstructor/YC.Web/tree/master/docs/content
+  [gh]: https://github.com/YaccConstructor/YC.Web
+  [issues]: https://github.com/YaccConstructor/YC.Web/issues
+  [readme]: https://github.com/YaccConstructor/YC.Web/blob/master/README.md
+  [license]: https://github.com/YaccConstructor/YC.Web/blob/master/LICENSE.txt
 *)

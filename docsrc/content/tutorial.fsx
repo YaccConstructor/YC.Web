@@ -4,16 +4,56 @@
 #I "../../bin"
 
 (**
-Introducing your project
+Adding new algorithm
 ========================
 
-Say more
+To create new algorithm page add to project two files: 
+*) 
 
-*)
-#r "YC.Web.dll"
-open YC.Web
+AlgorithmNameClient.fs 
+(** 
+and 
+*) 
+AlgorithmNameServer.fs 
 
-Library.hello 0
 (**
-Some more info
+
+Then edit next type adding link for new page: 
+
 *)
+type EndPoint =
+    | [<EndPoint "/">] Home
+    | [<EndPoint "/BioGraph">] BioGraph
+    | [<EndPoint "/NewPageLink">] NewPageLink
+(**
+
+Next, create function that will generate empty page:
+
+*)
+let NewPageLink ctx =
+    Templating.Main ctx EndPoint.NewPageLink "NewPageLink" [
+        Div [
+                H1 [Text "Your app"] -< [Attr.Align "center"]
+                ] -< [Attr.Class "jumbotron"]
+        Div [
+            ClientSide <@ NewPageLinkClient.MainFormRun () @>
+            ]   -< [Attr.Align "center"]
+
+(**
+Where "NewPage.MainFormRun ()" is a form that you have to run from NewPageClient file using WebComponents module.
+<img src="img/img2.png" alt="2"/>
+
+To add descriptional form for you algorithm on main page add next code:
+*)
+let NewPageForm = {
+            Name = "NewPage"; 
+            Description =  "Small algorithm description"; 
+            Link = (ctx.Link EndPoint.NewPageLink)
+        }
+yield (NewPage.CreateForm())
+
+(**
+<img src="img/img1.png" alt="1"/>
+*)
+
+    
