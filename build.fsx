@@ -36,7 +36,7 @@ let summary = "Web UI for YC"
 let description = "Project has no description; update build.fsx"
 
 // List of author names (for NuGet package)
-let authors = [ "ShalamovRoman" ]
+let authors = [ "YaccConstructor" ]
 
 // Tags for your project (for NuGet package)
 let tags = ""
@@ -52,14 +52,14 @@ let testAssemblies = "tests/**/bin" </> configuration </> "*Tests*.dll"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
-let gitOwner = "ShalamovRoman"
+let gitOwner = "YaccConstructor"
 let gitHome = sprintf "%s/%s" "https://github.com" gitOwner
 
 // The name of the project on GitHub
 let gitName = "YC.Web"
 
 // The url for the raw files hosted
-let gitRaw = environVarOrDefault "gitRaw" "https://raw.githubusercontent.com/ShalamovRoman"
+let gitRaw = environVarOrDefault "gitRaw" "https://raw.githubusercontent.com/YaccConstructor"
 
 // --------------------------------------------------------------------------------------
 // END TODO: The rest of the file includes standard build steps
