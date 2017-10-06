@@ -4,7 +4,7 @@
 #I "../../bin"
 
 (**
-GraphParsingDemo
+YC.GraphParsingDemo
 ======================
 
 Documentation
