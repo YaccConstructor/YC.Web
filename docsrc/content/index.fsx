@@ -19,7 +19,7 @@ YC.Web is a web application for [YaccConstructor][yaccconstructor]. It contains 
   <div class="span6">
     <div class="well well-small" id="nuget">
       Use the YC.Web web application :
-      <pre><a href="https://nuget.org/packages/YC.Web">AppHarbor reference </a></pre>
+      <pre><a href="https://appharbor.com/YC.Web">AppHarbor reference </a></pre>
     </div>
   </div>
   <div class="span1"></div>
