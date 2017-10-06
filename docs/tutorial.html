@@ -33,20 +33,7 @@
         <div class="span9" id="main">
           
 <h1><a name="Adding-new-algorithm" class="anchor" href="#Adding-new-algorithm">Adding new algorithm</a></h1>
-<p>To create new algorithm page add to project two files:</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">AlgorithmNameClient</span><span class="o">.</span><span class="i">fs</span> 
-</code></pre></td>
-</tr>
-</table>
-<p>and</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">AlgorithmNameServer</span><span class="o">.</span><span class="i">fs</span> 
-</code></pre></td>
-</tr>
-</table>
+<p>To create new algorithm page add to project two files: <code>AlgorithmNameClient.fs</code> and <code>AlgorithmNameServer.fs</code></p>
 <p>Then edit next type adding link for new page:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -81,9 +68,9 @@
 </code></pre></td>
 </tr>
 </table>
-<p>Where "NewPage.MainFormRun ()" is a form that you have to run from NewPageClient file using WebComponents module.
+<p>Where <code>ewPage.MainFormRun ()</code> is a form that you have to run from <code>NewPageClient.fs</code> file using <code>WebComponents</code> module.</p>
 <img src="img/img2.png" alt="2"/>
-To add descriptional form for you algorithm on main page add next code:</p>
+<p>To add descriptional form for you algorithm on main page add next code:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
