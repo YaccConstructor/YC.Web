@@ -5,8 +5,8 @@ open System.Reflection
 [<assembly: AssemblyTitleAttribute("YC.Web")>]
 [<assembly: AssemblyProductAttribute("YC.Web")>]
 [<assembly: AssemblyDescriptionAttribute("Web UI for YC")>]
-[<assembly: AssemblyVersionAttribute("1.0.1")>]
-[<assembly: AssemblyFileVersionAttribute("1.0.1")>]
+[<assembly: AssemblyVersionAttribute("1.0")>]
+[<assembly: AssemblyFileVersionAttribute("1.0")>]
 [<assembly: AssemblyConfigurationAttribute("Release")>]
 do ()
 
@@ -14,6 +14,6 @@ module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "YC.Web"
     let [<Literal>] AssemblyProduct = "YC.Web"
     let [<Literal>] AssemblyDescription = "Web UI for YC"
-    let [<Literal>] AssemblyVersion = "1.0.1"
-    let [<Literal>] AssemblyFileVersion = "1.0.1"
+    let [<Literal>] AssemblyVersion = "1.0"
+    let [<Literal>] AssemblyFileVersion = "1.0"
     let [<Literal>] AssemblyConfiguration = "Release"

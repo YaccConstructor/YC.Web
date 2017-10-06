@@ -13,12 +13,12 @@ let referenceBinaries = []
 // Web site location for the generated documentation
 let website = "/YC.Web"
 
-let githubLink = "https://github.com/ShalamovRoman/YC.Web"
+let githubLink = "https://github.com/YaccConstructor/YC.Web"
 
 // Specify more information about your project
 let info =
   [ "project-name", "YC.Web"
-    "project-author", "ShalamovRoman"
+    "project-author", "YaccConstructor"
     "project-summary", "Web UI for YC"
     "project-github", githubLink
     "project-nuget", "http://nuget.org/packages/YC.Web" ]
