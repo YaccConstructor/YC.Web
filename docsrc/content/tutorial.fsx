@@ -33,7 +33,7 @@ let NewPageLink ctx =
 (**
 Where `NewPage.MainFormRun ()` is a form that you have to run from `NewPageClient.fs` file using `WebComponents` module.
 
-<img src="YC.Web/img/img2.png" alt="2"/>
+<img src="img/img2.png" alt="2"/>
 
 To add descriptional form for you algorithm on main page add next code:
 *)
@@ -45,7 +45,11 @@ let NewPageForm = {
 yield (NewPage.CreateForm())
 
 (**
-<img src="YC.Web/img/img1.png" alt="1"/>
+<img src="files/img/img1.png" alt="1"/>
+
+<img src="docsr/files/img/img1.png" alt="1"/>
+
+<img src="docs/img/img1.png" alt="1"/>
 *)
 
     
