@@ -67,14 +67,8 @@ module WebComponents =
         let formW = setFormWidth 0.4
         let formH = setFormHeight 0.15
         
-        let buttonStyle = "padding-top: 0px;
-                        background-color: #FF69B4; 
-                        border-width: 3px; 
-                        font-weight: bold;
-                        border-color: #000000; 
-                        border-radius: 10px; 
-                        color: #000000; 
-                        height: " + setFormHeight 0.05 + "; 
+        let buttonStyle = 
+                        "height: " + setFormHeight 0.05 + "; 
                         width: " + setFormWidth 0.06 + "; 
                         font-size:" + setFormHeight 0.02; 
   

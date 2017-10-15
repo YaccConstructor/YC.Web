@@ -92,7 +92,7 @@ module GraphParsingClient =
                         return rng 
                         }                   
                     |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
-                                                                                                Label = Some "FIND PATH"
+                                                                                                Label = Some "Find Path" 
                                                                                                 Style = Some buttonStyle })  
                     |> wsff.Horizontal    
                     |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"todown"})
