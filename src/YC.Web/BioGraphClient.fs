@@ -52,9 +52,10 @@ module BioGraphClient =
         let InputForm = 
             let InputGrammarForm = 
                 wsff.Do {
-                    let! grammar= InputAreaControl "Grammar" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Grammar
-                        |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Grammar grmName))
-                    let! strRange = RangeControl "String Range" "Min" "Max" 
+                    let! grammar= InputAreaControl "Grammar" "Type in grammar here. Use \"ChooseDefault\" to see example. You can also upload files from your device."
+                                                            (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Grammar
+                                                            |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Grammar grmName))
+                    let! strRange = RangeControl "String Range" "Type in sequence length here. Remember that the range input should be correct. Also if you want to get all length sequences, input (-1, -1) range." "Min" "Max" 
                     return (grammar,strRange)
                     }
                     |> wsff.Vertical
@@ -62,8 +63,9 @@ module BioGraphClient =
      
             let InputGraphForm = 
                 wsff.Do {
-                    let! graph = InputAreaControl "Graph" (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Graph
-                        |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Graph grmName))
+                    let! graph = InputAreaControl "Graph" "Type in graph here. Use \"ChooseDefault\" to see example."
+                                                           (BioGraphRemote.LoadDefaultFileNames BioGraphRemote.FileType.Graph
+                                                           |> List.map (fun grmName -> grmName, BioGraphRemote.LoadDefaultFile BioGraphRemote.FileType.Graph grmName))
                     let! drawGr = wsfc.Checkbox false |> wsfe.WithTextLabel "Draw Graph" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer
                     return (graph, drawGr)
                         } 

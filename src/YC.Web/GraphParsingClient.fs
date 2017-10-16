@@ -47,16 +47,18 @@ module GraphParsingClient =
         let InputForm = 
             let GrammarInputForm =         
                 wsff.Do {
-                    let! grammar = InputAreaControl "Grammar" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Grammar
-                        |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Grammar grmName))
+                    let! grammar = InputAreaControl "Grammar" "Type in grammar here. Use \"ChooseDefault\" to see example. You can also upload files from your device. "
+                                                                    (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Grammar
+                                                                    |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Grammar grmName))
                     return (grammar) 
                     }
                 |> wsff.Vertical
                 |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"tomiddle"})
             let GraphInputForm  = 
                 wsff.Do {
-                    let! graph = InputAreaControl "Graph" (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Graph 
-                        |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Graph grmName))
+                    let! graph = InputAreaControl "Graph" "Type in graph here. Use \"ChooseDefault\" to see example. If you want to show formal subgraph of input graph and/or remove redundant nodes from SPPF, use checkboxes under this form." 
+                                                                    (GraphParsingRemote.LoadDefaultFileNames GraphParsingRemote.FileType.Graph 
+                                                                    |> List.map (fun grmName -> grmName, GraphParsingRemote.LoadDefaultFile GraphParsingRemote.FileType.Graph grmName))
                     let! subgraphCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "Show formal subgraph" |> wsfe.WithLabelLeft
                     let! removeCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "Remove redundant nodes" |> wsfe.WithLabelLeft 
                     return(graph,subgraphCheckbox,removeCheckbox)
@@ -88,11 +90,11 @@ module GraphParsingClient =
 
                 let RangeAndButtonForm  =
                     wsff.Do {
-                        let! rng = RangeControl "Vertices" "Initial" "Final"
+                        let! rng = RangeControl "Vertices" "To extract minimal length path between two specific vertices of the input graph write their numbers in special form and press \"Find Path\". Remember that the range input should be correct." "Initial" "Final"
                         return rng 
                         }                   
                     |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
-                                                                                                Label = Some "FIND PATH"
+                                                                                                Label = Some "Find Path" 
                                                                                                 Style = Some buttonStyle })  
                     |> wsff.Horizontal    
                     |> wsfe.WithCustomFormContainer({wsfe.FormContainerConfiguration.Default with CssClass=Some"todown"})
