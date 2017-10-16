@@ -10,22 +10,7 @@ YC.Web
 
 
 YC.Web is a web application for [YaccConstructor][yaccconstructor]. It contains components for visualization algorithms.
- 
-
-
-
-<div class="row">
-  <div class="span1"></div>
-  <div class="span6">
-    <div class="well well-small" id="nuget">
-      Use the YC.Web web application :
-      <pre><a href="https://appharbor.com/YC.Web">AppHarbor reference </a></pre>
-    </div>
-  </div>
-  <div class="span1"></div>
-</div>
-
- You can read how to visualize new algorithm on [tutorial page](tutorial.html).
+You can read how to visualize new algorithm on [tutorial page](tutorial.html).
 
 
 Samples & documentation
