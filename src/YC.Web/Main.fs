@@ -84,6 +84,7 @@ module Site =
                         ] -< [Text " to learn more about YaccConstructor."] -< [Attr.Align "center"]
                     ] -< [Attr.Class "container"]
                 ] -< [Attr.Class "jumbotron"]
+
             Div [ 
                 Div [
                     //Creates algorithm form in main page                    
@@ -107,8 +108,10 @@ module Site =
     let BioGraphPage ctx =
         Templating.Main ctx EndPoint.BioGraph "BioGraph" [
             Div [
-                H1 [Text "BioGraph page"] -< [Attr.Align "center"]
-                ] -< [Attr.Class "jumbotron"]
+                H1 [Text "BioGraph page"]
+                P [Text "Web application for searching subpaths in the metagenomic sequences."]
+                P [Text  "This app also visualizes the obtained sequences on input graph."] 
+                ] -< [Attr.Class "jumbotron"] -< [Attr.Align "center"]
             Div [
                 ClientSide <@ BioGraphClient.MainFormRun () @>
              ] -< [Attr.Align "center"]
@@ -117,8 +120,10 @@ module Site =
     let GraphParsingDemoPage ctx =
        Templating.Main ctx EndPoint.GraphParsingDemo "GraphParsingDemo" [
             Div [
-                 H1 [Text "GraphParsing Application"] -< [Attr.Align "center"]
-                 ] -< [Attr.Class "jumbotron"]
+                 H1 [Text "GraphParsing Application"]
+                 P [Text "Web application for graph parsing and visualization."] 
+                 P [Text "This app also can extract the minimal length path between two specified verteces."]  
+                 ] -< [Attr.Class "jumbotron"] -< [Attr.Align "center"]
             Div [
                 ClientSide <@ GraphParsingClient.MainFormRun () @>
              ]   -< [Attr.Align "center"]
