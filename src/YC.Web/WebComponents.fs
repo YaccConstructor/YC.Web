@@ -79,7 +79,7 @@ module WebComponents =
             let ChoouseDefaultControlHeight = setFormWidth 0.02
             wsff.Do {
                 let! dataSelect = 
-                    wsfc.Select 1 (("", "") :: defaultData)
+                    wsfc.Select 0 (("", "") :: defaultData)
                     |> wsfe.WithTextLabel "ChooseDefault"
                     |> setFormSize (ChoouseDefaultControlHeight, ChoouseDefaultControlWidth) "select" 
                     |> wsfe.WithFormContainer 
@@ -109,7 +109,7 @@ module WebComponents =
     //************InputArea component************// 
      
         //Text input area with ChooseFromFile and ChooseDefault buttons          
-        let InputAreaControl signature defaultData  = 
+        let InputAreaControl signature  description defaultData  = 
             wsff.Do {
                 let! (defaultValue, fileInput) = 
                     wsff.Do {  
@@ -123,8 +123,8 @@ module WebComponents =
                     | "" -> defaultValue
                     | _ -> fileInput
                 let! textInput =
-                    wsfc.TextArea txt            
-                    |> wsfe.WithTextLabel signature
+                    wsfc.TextArea txt
+                    |> wsfe.WithLabelAndInfo signature description             
                     |> wsfe.WithLabelAbove
                     |> setFormSize (formH, formW) "textarea"          
                 return (textInput)
@@ -174,7 +174,7 @@ module WebComponents =
 
     //************Range component with integer values************//
 
-        let RangeControl signature initLabel finLabel =
+        let RangeControl signature description initLabel finLabel =
             let RangeControlWidth = string (double (screenHeight) * 0.16) + "px"
             let RangeControlHeight = string (double (screenHeight) * 0.04) + "px"
             wsff.Yield (fun min max -> (int min, int max))
@@ -193,6 +193,6 @@ module WebComponents =
                     return finField }
 
             |> wsff.Horizontal 
-            |> wsfe.WithTextLabel signature
+            |> wsfe.WithLabelAndInfo signature description
             |> wsfe.WithLabelAbove
             |> wsfe.WithFormContainer
